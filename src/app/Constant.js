@@ -1,3 +1,4 @@
+import moment from 'moment';
 import * as Yup from 'yup';
 
 export const SET_REGISTER = "SET_REGISTER"
@@ -106,13 +107,9 @@ export const validationSchema = Yup.object({
   })
 
     const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const hours = date.getHours() % 12 || 12; 
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    const period = date.getHours() >= 12 ? 'PM' : 'AM';
-  
-    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${hours}:${minutes}:${seconds} ${period}`;
+      const formattedDate = moment(dateString)
+      .utc()  
+      .format("DD-MM-YYYY hh:mm A");
     
     return formattedDate;
   };

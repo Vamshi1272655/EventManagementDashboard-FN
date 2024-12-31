@@ -415,5 +415,47 @@ export const MapperDD=(edata,adata)=>{
   return {edd,add}
 }
 
+const eventFilter=(edata,id)=>{
+  if(!isEmpty(edata) || !isEmpty(id)){
+    const filter = edata.filter((data) => data.id === id)
+    return !isEmpty(filter[0])? filter[0].name:"-"
+  }
+   return ""
+}
 
+const attendeeFilter=(adata,id)=>{
+  if(!isEmpty(adata) || !isEmpty(id)){
+    const filter = adata.filter((data) => data.id === id)
+    return !isEmpty(filter[0])? filter[0].name:"-"
+  }
+   return ""
+}
+
+export const taskMapper = (res, eventData, attendeeData) => {
+  let data = [];
+  
+  if (!isEmpty(res) && !isEmpty(eventData) && !isEmpty(attendeeData)) {
+
+    data = res.map((task) => {
+      const event = eventFilter(eventData, task.eventId);  
+      const attendee = attendeeFilter(attendeeData, task.attendeeId);  
+
+      return {
+        id: task.id,
+        eventId: task.eventId,
+        deadline: task.deadline,
+        attendeeId: task.attendeeId,
+        status: task.status,
+        taskName: task.taskName,
+        eventName: !isEmpty(event) ? event : "",  
+        attendeeName: !isEmpty(attendee) ? attendee : "",  
+      };
+    });
+  } else {
+     
+    data = []; 
+  }
+
+  return data;
+};
  

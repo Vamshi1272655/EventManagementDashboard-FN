@@ -1,7 +1,7 @@
 'use client'
 
 import { Field, Form, Formik } from "formik";
-import { validationAddEvent, validationAddTask } from "../Constant";
+import { validationAddTask } from "../Constant";
 import DatePicker from "react-datepicker";
 import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,8 +15,6 @@ const AddTaskModel = ({ ModalOpen}) => {
 
    
     const dispatch=useDispatch()
-    const selectedEvent=useSelector((state)=>state.selectedEvent)
-    const Event=useSelector((state)=>state.eventForm)
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token")||"";
 
@@ -106,7 +104,8 @@ const AddTaskModel = ({ ModalOpen}) => {
               handleBlur,
               setFieldValue,
               isSubmitting,
-              dirty
+              dirty,
+              isValid
             }) => (
               <Form>
                 <div>
@@ -161,7 +160,7 @@ const AddTaskModel = ({ ModalOpen}) => {
                     Attendee Id
                   </label>
                   <Field
-                    as="select" // Use 'as' prop to render a <select> element
+                    as="select"  
                     id="attendeeId"
                     name="attendeeId"
                     onChange={handleAttendeeId}
@@ -203,13 +202,13 @@ const AddTaskModel = ({ ModalOpen}) => {
                 <div className="flex items-center p-4 border-t border-gray-200 rounded-b dark:border-gray-600">
                   <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    disabled={isSubmitting || !dirty || !isValid || !eIdValue || !aIdValue}
+                    className={`text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 ${isSubmitting || !dirty || !isValid || !eIdValue || !aIdValue ? "bg-blue-200 cursor-not-allowed" : "bg-blue-700 hover:bg-blue-800"}`}
                   >
                     Save
                   </button>
                   <button
-                    onClick={() => ModalOpen(false)} // Close modal
+                    onClick={() => ModalOpen(false)} 
                     type="button"
                     className="ml-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg py-2.5 px-5 hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white"
                   >

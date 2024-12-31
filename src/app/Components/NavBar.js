@@ -4,6 +4,8 @@ import React from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { setTabval, setToken } from "../Action";
 import { useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarAlt, faIdCard, faTasks, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
 const NavBar=()=>{
    
@@ -33,7 +35,7 @@ const NavBar=()=>{
                     className={`inline-block p-4 border-b-2 rounded-t-lg ${tab === 1 ? "text-blue-600 border-blue-600" : "hover:text-gray-600 hover:border-gray-300"}`}
                     onClick={() => handleTab(1)}
                 >
-                    Event Management
+                    <FontAwesomeIcon icon={faCalendarAlt} size="xl" className="mr-2"/>  Event Management
                 </a>
                 </li>
                 <li className="mr-2">
@@ -42,7 +44,7 @@ const NavBar=()=>{
                     className={`inline-block p-4 border-b-2 rounded-t-lg ${tab === 2 ? "text-blue-600 border-blue-600" : "hover:text-gray-600 hover:border-gray-300"}`}
                     onClick={() => handleTab(2)}
                 >
-                    Attendee Management
+                    <FontAwesomeIcon icon={faIdCard} size="xl" className="mr-2"/> Attendee Management
                 </a>
                 </li>
                 <li className="mr-2">
@@ -51,15 +53,15 @@ const NavBar=()=>{
                     className={`inline-block p-4 border-b-2 rounded-t-lg ${tab === 3 ? "text-blue-600 border-blue-600" : "hover:text-gray-600 hover:border-gray-300"}`}
                     onClick={() => handleTab(3)}
                 >
-                    Task Tracker
+                   <FontAwesomeIcon icon={faTasks} size="xl" className="mr-2"/> Task Tracker
                 </a>
                 </li>
                 <li className="ml-auto">
                 <a
                     onClick={handleLogout}
-                    className="inline-block p-4 border-b-2 rounded-t-lg hover:text-red-600 hover:border-red-300"
+                    className="inline-block p-4 border-b-2 rounded-t-lg hover:text-red-600 hover:border-red-300 cursor-pointer"
                 >
-                    Logout
+                  <FontAwesomeIcon icon={faUserCircle} size="xl" className="mr-2"/>  Logout
                 </a>
                 </li>
             </ul>

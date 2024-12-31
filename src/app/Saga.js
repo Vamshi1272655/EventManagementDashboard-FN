@@ -3,7 +3,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { setLoader, setStatus, setMessage, setVisible, setToken, getEventData, setEventData, getAttendeeData, setAttendeeData, getTaskData, setTaskData, setEventDD, setAttendeeDD } from './Action';
 import { DELETE_ATTENDEE_DATA, DELETE_EVENT_DATA, GET_ATTENDEE_DATA, GET_EVENT_DATA, GET_TASK_DATA, POST_ATTENDEE_DATA, POST_EVENT_DATA, POST_TASK_DATA, POST_USER_LOGIN, POST_USER_REGISTER, PUT_TASK_STATUS, TASK_DD, UPDATE_EVENT_DATA } from './Constant';
-import { deleteAttendee, deleteEvent, fetchAttendeeData, fetchEventData, fetchTaskData, MapperDD, postAttendee, postEvent, postTask, putTask, updateEvent, UserLoginToken, userRegister } from './mapper';
+import { deleteAttendee, deleteEvent, fetchAttendeeData, fetchEventData, fetchTaskData, MapperDD, postAttendee, postEvent, postTask, putTask, taskMapper, updateEvent, UserLoginToken, userRegister } from './mapper';
 import { isEmpty } from 'lodash';
  
 
@@ -49,16 +49,17 @@ function* getAttendeeDetails(action){
 
 function* getTaskDetails(action){
   const res=yield call(fetchTaskData,action.payload.token)
-  yield put(setTaskData(res))
-   
+  const eventData=yield select((state)=>state.eventDD)
+  const attendeeData=yield select((state)=>state.attendeeDD)
+  const result = yield call(taskMapper,res,eventData,attendeeData)
+  yield put(setTaskData(result))
 }
 
 function* postEventDetails(action) {
   const token = action.payload.token;
   if (!isEmpty(token)) {
     const eventForm = yield select((state) => state.eventForm);
- 
-    const res = yield call(
+  yield call(
       postEvent,
       eventForm.eventname,
       eventForm.eventdate,

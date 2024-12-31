@@ -9,7 +9,6 @@ import TaskTracker from "../Components/TaskTracker"
 const Dashboard=()=>{
 
     const tabVal=useSelector((state)=>state.tabval)
-    console.log(tabVal)
 
     return(
         <div>

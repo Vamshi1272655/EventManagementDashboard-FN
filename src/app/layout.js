@@ -24,12 +24,12 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <head>
           <meta name="description" content={metadata.description} />
-          <title>{metadata.title}</title>
+          <title>Event Management Dashboard</title>
         </head>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           {children}
         </body>
       </html>
     </Provider>
-  );
+  );   
 }

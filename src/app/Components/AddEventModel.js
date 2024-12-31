@@ -5,13 +5,20 @@ import { validationAddEvent } from "../Constant";
 import DatePicker from "react-datepicker";
 import { useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from 'date-fns'; // Importing date-fns for date formatting
-import { useDispatch, useSelector} from "react-redux";
+import { format } from 'date-fns';
+import { useDispatch} from "react-redux";
 import { getEventData, postEventData, setEventForm,updateEventData} from "../Action";
+import { isEmpty } from "lodash";
+import moment from "moment";
  
 
 const AddEventModel = ({ ModalOpen, event }) => {
 
+  const time=()=>{
+    const eventTime = moment(event.eventdate).subtract(5, 'hours')
+    .subtract(30, 'minutes').local().toDate(); 
+    return eventTime
+  }
     const dispatch=useDispatch()
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token")||"";
@@ -30,19 +37,18 @@ const AddEventModel = ({ ModalOpen, event }) => {
     };
   
   useEffect(()=>{
-      dispatch(postEventData(token))
       dispatch(getEventData(token))
     
   },[dispatch,token])
 
   const minTime = new Date();
-  minTime.setHours(1); // 1:00 AM
+  minTime.setHours(0);  
   minTime.setMinutes(0);
-
+  
   const maxTime = new Date();
-  maxTime.setHours(23); // 11:00 PM
-  maxTime.setMinutes(0);
-
+  maxTime.setHours(23); 
+  maxTime.setMinutes(59);
+  
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
@@ -51,7 +57,7 @@ const AddEventModel = ({ ModalOpen, event }) => {
       <div className="relative mx-4 p-4 w-full max-w-3xl bg-white rounded-lg shadow-lg dark:bg-gray-700">
         <div className="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-          {event ? "Edit Event" : "Add Event"}
+          { event.eid>0? "Edit Event":"Add Event"}
           </h3>
           <button
             onClick={() => ModalOpen(false)} // Close modal
@@ -76,10 +82,11 @@ const AddEventModel = ({ ModalOpen, event }) => {
         <div className="p-4 space-y-4">
           <Formik
             initialValues={{
-              eventname: event?event.eventname:"",
-              description: event?event.description:"",
-              location: event?event.location:"",
-              eventdate: event?event.eventdate:null,  
+              eventname: !isEmpty(event)?event.eventname || "":"",
+              description: !isEmpty(event)?event.description || "":"",
+              location: !isEmpty(event)?event.location || "":"",
+              eventdate: !isEmpty(event) && event.eventdate ? time(event.eventdate) : null,
+  
             }}
             validationSchema={validationAddEvent}
             onSubmit={handleSubmit}
@@ -92,7 +99,8 @@ const AddEventModel = ({ ModalOpen, event }) => {
               handleBlur,
               setFieldValue,
               isSubmitting,
-              dirty
+              dirty,
+              isValid
             }) => (
               <Form>
                 <div>
@@ -165,11 +173,11 @@ const AddEventModel = ({ ModalOpen, event }) => {
                   <DatePicker
                     id="eventdate"
                     selected={values.eventdate}
-                    onChange={(date) => setFieldValue("eventdate", date)} // Store as Date object
+                    onChange={(date) => setFieldValue("eventdate", date)}  
                     showTimeSelect
                     minTime={minTime}
                     maxTime={maxTime}
-                    minDate={new Date()} // Disable past dates
+                    minDate={new Date()}  
                     dateFormat="MMMM d, yyyy h:mm aa"
                     placeholderText="Select date and time"
                     className="w-96 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -179,13 +187,14 @@ const AddEventModel = ({ ModalOpen, event }) => {
                   )}
                 </div>
                 <div className="flex items-center p-4 border-t border-gray-200 rounded-b dark:border-gray-600">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  >
-                    Save
-                  </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting || !dirty || !isValid}
+                  className={`text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 ${isSubmitting || !dirty || !isValid ? "bg-blue-200 cursor-not-allowed" : "bg-blue-700 hover:bg-blue-800"}`}
+                >
+                  Save
+                </button>
+
                   <button
                     onClick={() => ModalOpen(false)} // Close modal
                     type="button"

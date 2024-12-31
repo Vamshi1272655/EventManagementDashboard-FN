@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import AddTaskModel from "./AddTaskModel";
 import { isArray, isEmpty } from "lodash";
 import formatDate from "../Constant";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle, faPlus, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 
 const TaskTracker=()=>{
 
@@ -36,15 +38,16 @@ const TaskTracker=()=>{
     },[dispatch,token])
 
     return(
-        <div className="p-10">
+        <div>
+            <div className="p-10">
              <div className="flex justify-end">
                 <div className="px-2 py-2">
                 <button
                             onClick={() => setIsModalOpen(true)} // Open modal
                             type="button"
-                            className="bg-blue-600 py-1 px-5 rounded-md text-white"
+                            className="bg-blue-600 py-1 px-3 rounded-md text-white"
                         >
-                            Add
+                            <FontAwesomeIcon icon={faPlus} size="md" className="mr-1"/>  Add
                         </button>
                 </div>
             </div>
@@ -71,6 +74,12 @@ const TaskTracker=()=>{
                                 Attendee Id
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                Event Name
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Attendee Name
+                            </th>
+                            <th scope="col" className="px-6 py-3">
                                 Action
                             </th>
                         </tr>
@@ -93,15 +102,15 @@ const TaskTracker=()=>{
                                     {d.status || "-"}
                                 </span>
                             </td>
-
-
+                            <td className="px-6 py-4">{d.eventName || "-"}</td>
+                            <td className="px-6 py-4">{d.attendeeName || "-"}</td>
                             <td className="px-6 py-4">{d.eventId || "-"}</td>
                             <td className="px-6 py-4">{d.attendeeId || "-"}</td>
                             <td className="px-4 py-4">
-                                {d.status==="PENDING"?<button title= "Complete" className="font-medium text-green-600 hover:underline px-1" onClick={() => handleStatus(d)}>
-                                Completed
-                            </button>: <button className="font-medium text-red-600 hover:underline px-1" onClick={() => handleStatus(d)}>
-                                Pending
+                                {d.status==="PENDING"?<button title= "Complete" className="font-medium text-green-600 hover:underline px-5" onClick={() => handleStatus(d)}>
+                                <FontAwesomeIcon icon={faCheckCircle} title="Complete" size="xl" />
+                            </button>: <button className="font-medium text-red-600 hover:underline px-5" onClick={() => handleStatus(d)}>
+                                <FontAwesomeIcon icon={faTimesCircle} title="Pending" size="xl" />
                             </button>}
                             
                            
@@ -117,6 +126,8 @@ const TaskTracker=()=>{
             {isModalOpen && <AddTaskModel ModalOpen={handleCloseModal}/>}
 
         </div>
+        </div>
+        
     )
 
 }

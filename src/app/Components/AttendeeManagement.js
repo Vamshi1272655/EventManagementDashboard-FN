@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import AddAttendeeModel from "./AddAttendeeModel";
 import DeleteModel from "./DeleteModel";
 import { isArray, isEmpty } from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const AttendeeManagement=()=>{
 
@@ -42,11 +44,11 @@ const AttendeeManagement=()=>{
             <div className="flex justify-end">
                 <div className="px-2 py-2">
                 <button
-                            onClick={() => setIsModalOpen(true)} // Open modal
+                            onClick={() => setIsModalOpen(true)}  
                             type="button"
-                            className="bg-blue-600 py-1 px-5 rounded-md text-white"
+                            className="bg-blue-600 py-1 px-3 rounded-md text-white"
                         >
-                            Add
+                            <FontAwesomeIcon icon={faPlus} size="md" className="mr-1"/>  Add
                         </button>
                 </div>
             </div>
@@ -84,9 +86,9 @@ const AttendeeManagement=()=>{
                             <td className="px-6 py-4">{d.email || "-"}</td>
                             <td className="px-6 py-4">{d.phone || "-"}</td>
                             <td className="px-4 py-4">
-                            <a href="#" className="font-medium text-red-600 px-1"
+                            <a href="#" className="font-medium text-red-600 px-5"
                              onClick={() => handleDeleteClick(d)}>
-                                Delete
+                               <FontAwesomeIcon icon={faTrash} title="Delete" size="lg"/>
                             </a>
                             </td>
                         </tr>

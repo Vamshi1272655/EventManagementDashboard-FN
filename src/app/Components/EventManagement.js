@@ -9,6 +9,8 @@ import DeleteModel from "./DeleteModel"
 import formatDate from "../Constant"
 import Notification from "./Notification"
 import Loading from "./Loading"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit, faPlus, faTrash, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 
 const EventManagement=()=>{
 
@@ -31,10 +33,7 @@ const EventManagement=()=>{
 
     useEffect(() => {
         dispatch(getAttendeeData(token))
-        if (token) {
-            dispatch(getEventData(token));  
-        }
-        if (!isModalOpen) {
+        if (token || !isModalOpen) {            
             dispatch(getEventData(token));  
         }
     }, [dispatch, token,isModalOpen]);
@@ -70,9 +69,9 @@ const EventManagement=()=>{
                     <button
                                 onClick={() => setIsModalOpen(true)} // Open modal
                                 type="button"
-                                className="bg-blue-600 py-1 px-5 rounded-md text-white"
+                                className="bg-blue-600 py-1 px-3 rounded-md text-white"
                             >
-                                Add
+                              <FontAwesomeIcon icon={faPlus} size="md" className="mr-1"/>  Add
                             </button>
                     </div>
                 </div>
@@ -113,14 +112,14 @@ const EventManagement=()=>{
                             <td className="px-6 py-4">{d.description || "-"}</td>
                             <td className="px-6 py-4">{d.location || "-"}</td>
                             <td className="px-6 py-4">{!isEmpty(d.event_date)?formatDate(d.event_date) || "-" : "-"}</td>
-                            <td className="px-4 py-4">
+                            <td className="px-5 py-4">
                             <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline px-1"
                              onClick={() => handleEditClick(d)}>
-                                Edit
+                                <FontAwesomeIcon icon={faEdit} title="Edit" size="lg"/>
                             </a>
-                            <a href="#" className="font-medium text-red-600 dark:text-blue-500 hover:underline px-1"
+                            <a href="#" className="font-medium text-red-600 dark:text-blue-500 hover:underline px-2"
                             onClick={() => handleDeleteClick(d)}>
-                                Delete
+                                <FontAwesomeIcon icon={faTrash} title="Delete" size="lg"/>
                             </a>
                             </td>
                         </tr>
